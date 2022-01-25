@@ -221,3 +221,9 @@ class Wlans(APIItems):
         wlan_url = f"{URL}/{wlan.id}"
         data = {"enabled": False}
         return await self._request("put", wlan_url, json=data)
+
+    async def change_password(self, wlan: Wlan, password: str) -> list[dict]:
+        """Unblock client from controller."""
+        wlan_url = f"{URL}/{wlan.id}"
+        data = {"x_passphrase": password}
+        return await self._request("put", wlan_url, json=data)

@@ -90,3 +90,11 @@ async def test_ports(mock_aioresponse, unifi_controller):
         "https://host:8443/api/s/default/rest/wlanconf/012345678910111213141516",
         json={"enabled": False},
     )
+
+    await wlans.change_password(wlan, "123456")
+    assert verify_call(
+        mock_aioresponse,
+        "put",
+        "https://host:8443/api/s/default/rest/wlanconf/012345678910111213141516",
+        json={"x_passphrase": "123456"},
+    )
