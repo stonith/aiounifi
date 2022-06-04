@@ -35,7 +35,7 @@ class MessageKey(enum.Enum):
     @classmethod
     def _missing_(cls, value: object) -> "MessageKey":
         """Set default enum member if an unknown value is provided."""
-        LOGGER.warning("Unsupported device type %s", value)
+        LOGGER.warning("Unsupported message key %s", value)
         return MessageKey.UNKNOWN
 
 
@@ -97,7 +97,7 @@ class EventKey(enum.Enum):
     @classmethod
     def _missing_(cls, value: object) -> "EventKey":
         """Set default enum member if an unknown value is provided."""
-        LOGGER.warning("Unsupported device type %s", value)
+        LOGGER.warning("Unsupported event key %s", value)
         return EventKey.UNKNOWN
 
 
@@ -210,9 +210,16 @@ class Event:
 
     @property
     def key(self) -> str:
-        # def event(self) -> str:
         """Event key e.g. 'EVT_WU_Disconnected'."""
         return self.raw["key"]
+
+    @property
+    def event(self) -> str:
+        """Event key e.g. 'EVT_WU_Disconnected'.
+
+        To be removed.
+        """
+        return self.key
 
     @property
     def msg(self) -> str:
