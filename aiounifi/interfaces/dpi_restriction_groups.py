@@ -6,14 +6,14 @@ from ..models.dpi_restriction_group import DPIRestrictionGroup
 from ..models.event import MessageKey
 from .api import APIItems
 
-GROUP_URL: Final = "/rest/dpigroup"  # List DPI Group configuration
+GROUP_URL: Final = "/rest/dpigroup"
 
 
 class DPIRestrictionGroups(APIItems):
     """Represents DPI Group configurations."""
 
-    KEY = "_id"
+    obj_id_key = "_id"
     path = GROUP_URL
     item_cls = DPIRestrictionGroup
-    messages = (MessageKey.DPI_GROUP_ADDED, MessageKey.DPI_GROUP_UPDATED)
-    removes = (MessageKey.DPI_GROUP_REMOVED,)
+    process_messages = (MessageKey.DPI_GROUP_ADDED, MessageKey.DPI_GROUP_UPDATED)
+    remove_messages = (MessageKey.DPI_GROUP_REMOVED,)

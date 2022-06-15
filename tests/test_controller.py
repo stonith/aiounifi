@@ -36,6 +36,7 @@ from aiounifi.controller import (
 )
 from aiounifi.interfaces.devices import URL as device_url
 from aiounifi.events import SWITCH_CONNECTED, WIRELESS_CLIENT_CONNECTED
+from aiounifi.models.event import EventKey
 from aiounifi.websocket import (
     SIGNAL_CONNECTION_STATE,
     SIGNAL_DATA,
@@ -523,7 +524,7 @@ async def test_clients(mock_aioresponse, unifi_controller):
     unifi_controller.callback.assert_called_with(
         SIGNAL_DATA, {DATA_EVENT: {client.event}}
     )
-    assert client.event.key == WIRELESS_CLIENT_CONNECTED
+    assert client.event.key == EventKey.WIRELESS_CLIENT_CONNECTED
     assert client.last_updated == SOURCE_EVENT
     assert mock_callback.call_count == 2
 
@@ -675,7 +676,7 @@ async def test_devices(mock_aioresponse, unifi_controller):
     unifi_controller.callback.assert_called_with(
         SIGNAL_DATA, {DATA_EVENT: {device.event}}
     )
-    assert device.event.key == SWITCH_CONNECTED
+    assert device.event.key == EventKey.SWITCH_CONNECTED
     assert device.last_updated == SOURCE_EVENT
     assert mock_callback.call_count == 2
 

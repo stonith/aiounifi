@@ -20,7 +20,6 @@ from .errors import (
     ServiceUnavailable,
     raise_error,
 )
-
 from .interfaces.clients import Clients
 from .interfaces.clients_all import ClientsAll
 from .interfaces.devices import Devices

@@ -6,17 +6,17 @@ from ..models.dpi_restriction_app import DPIRestrictionApp
 from ..models.event import MessageKey
 from .api import APIItems
 
-APP_URL: Final = "/rest/dpiapp"  # List DPI App configuration
+APP_URL: Final = "/rest/dpiapp"
 
 
 class DPIRestrictionApps(APIItems):
     """Represents DPI App configurations."""
 
-    KEY = "_id"
+    obj_id_key = "_id"
     path = APP_URL
     item_cls = DPIRestrictionApp
-    messages = (MessageKey.DPI_APP_ADDED, MessageKey.DPI_APP_UPDATED)
-    removes = (MessageKey.DPI_APP_REMOVED,)
+    process_messages = (MessageKey.DPI_APP_ADDED, MessageKey.DPI_APP_UPDATED)
+    remove_messages = (MessageKey.DPI_APP_REMOVED,)
 
     async def enable(self, app_id: str) -> list[dict]:
         """Enable DPI Restriction Group Apps."""

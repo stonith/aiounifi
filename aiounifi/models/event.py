@@ -2,15 +2,12 @@
 
 #  https://demo.ui.com/manage/locales/en/eventStrings.json?v=5.4.11.2
 
+from dataclasses import dataclass
 import enum
 import logging
-from typing import Final, final
+from typing import Any, Final, final
 
 LOGGER = logging.getLogger(__name__)
-
-
-# split message key on ":"?
-# sync - update/add, add - add, delete - remove
 
 
 class MessageKey(enum.Enum):
@@ -199,7 +196,7 @@ DEVICE_EVENTS: Final = (
 class Event:
     """UniFi event."""
 
-    def __init__(self, raw: dict) -> None:
+    def __init__(self, raw: dict[str, Any]) -> None:
         """Initialize event."""
         self.raw = raw
 
@@ -209,9 +206,9 @@ class Event:
         return self.raw["datetime"]
 
     @property
-    def key(self) -> str:
+    def key(self) -> EventKey:
         """Event key e.g. 'EVT_WU_Disconnected'."""
-        return self.raw["key"]
+        return EventKey(self.raw["key"])
 
     @property
     def event(self) -> str:
@@ -219,7 +216,7 @@ class Event:
 
         To be removed.
         """
-        return self.key
+        return self.raw["key"]
 
     @property
     def msg(self) -> str:
@@ -309,3 +306,39 @@ class Event:
     def version_to(self) -> str:
         """Version to."""
         return self.raw.get("version_to", "")
+
+
+@dataclass
+class Meta:
+    """Meta description of UniFi websocket data."""
+
+    rc: str
+    message: MessageKey
+    data: dict[str, Any]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Meta":
+        """Create meta instance from dict."""
+        return cls(
+            rc=data.get("rc", ""),
+            message=MessageKey(data.get("message", "")),
+            data=data,
+        )
+
+
+@dataclass
+class WebsocketData:
+    """Websocket package representation."""
+
+    meta: Meta
+    event: Event
+    data: dict[str, Any]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "WebsocketData":
+        """Create data container instance from dict."""
+        return cls(
+            meta=Meta.from_dict(data.get("meta", "")),
+            event=Event(data["data"]),
+            data=data,
+        )

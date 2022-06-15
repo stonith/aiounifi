@@ -5,7 +5,7 @@ pytest --cov-report term-missing --cov=aiounifi.events tests/test_events.py
 
 import pytest
 
-from aiounifi.models.event import Event
+from aiounifi.models.event import Event, EventKey
 
 from .fixtures import EVENT_SWITCH_16_CONNECTED, EVENT_WIRELESS_CLIENT_CONNECTED
 
@@ -39,7 +39,7 @@ async def test_client_event():
     event_data = EVENT_WIRELESS_CLIENT_CONNECTED["data"][0]
     client = Event(event_data)
 
-    assert client.key == "EVT_WU_Connected"
+    assert client.key == EventKey.WIRELESS_CLIENT_CONNECTED
     assert client.datetime == "2020-04-24T18:37:36Z"
     assert (
         client.msg
@@ -63,7 +63,7 @@ async def test_device_event():
     event_data = EVENT_SWITCH_16_CONNECTED["data"][0]
     device = Event(event_data)
 
-    assert device.key == "EVT_SW_Connected"
+    assert device.key == EventKey.SWITCH_CONNECTED
     assert device.datetime == "2020-05-03T08:35:35Z"
     assert device.msg == "Switch[fc:ec:da:11:22:33] was connected"
     assert device.time == 1588494935241
